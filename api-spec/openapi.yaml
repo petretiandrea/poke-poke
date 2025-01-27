@@ -1,0 +1,63 @@
+openapi: 3.0.3
+info:
+  title: Swagger Petstore - OpenAPI 3.0
+  version: 1.0.0
+servers:
+  - url: https://petstore3.swagger.io/api/v3
+
+paths:
+  /pokemon/{name}:
+    get:
+      tags:
+        - pokemon
+      operationId: getPokemonInfo
+      parameters:
+        - in: path
+          name: name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Pokemon info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PokemonInfo"
+        '404':
+          description: Pokemon not found by given name
+
+  /pokemon/translated/{name}:
+    get:
+      tags:
+        - pokemon
+      operationId: getTranslatedPokemonInfo
+      parameters:
+        - in: path
+          name: name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Pokemon info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PokemonInfo"
+        '404':
+          description: Pokemon not found by given name
+
+components:
+  schemas:
+    PokemonInfo:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        habitat:
+          type: string
+        isLegendary:
+          type: boolean

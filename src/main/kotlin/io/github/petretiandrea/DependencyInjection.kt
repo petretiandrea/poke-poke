@@ -18,21 +18,20 @@ import org.springframework.context.annotation.Configuration
 class DependencyInjection {
 
     @Bean
-    fun pokemonRepository(pokeApi: PokeApi) = PokemonRepositoryApiAdapter(pokeApi, PokemonApiReadModelAdapter())
+    fun pokemonRepository(pokeApi: PokeApi) =
+        PokemonRepositoryApiAdapter(pokeApi, PokemonApiReadModelAdapter())
+
+    @Bean fun pokemonTranslator(translator: Translator) = PokemonTranslator(translator)
 
     @Bean
-    fun pokemonTranslator(translator: Translator) = PokemonTranslator(translator)
-
-    @Bean
-    fun funTranslator(): Translator = FunTranslationApi(
-        HttpClient {
-            followRedirects = true
-            defaultRequest { url(FunTranslationApi.BASE_URL) }
-            install(ContentNegotiation) {
-                gson()
+    fun funTranslator(): Translator =
+        FunTranslationApi(
+            HttpClient {
+                followRedirects = true
+                defaultRequest { url(FunTranslationApi.BASE_URL) }
+                install(ContentNegotiation) { gson() }
             }
-        }
-    )
+        )
 
     @Bean
     fun pokeApi(): PokeApi {

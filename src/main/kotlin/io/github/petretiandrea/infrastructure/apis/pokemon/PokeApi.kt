@@ -1,7 +1,7 @@
 package io.github.petretiandrea.infrastructure.apis.pokemon
 
 import io.github.petretiandrea.common.ApiResponse
-import io.github.petretiandrea.common.adaptToApiError
+import io.github.petretiandrea.infrastructure.apis.adaptToApiError
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
@@ -25,8 +25,6 @@ class PokeApi(private val httpClient: HttpClient) {
             }
             .map { it.body<PokemonResponse>() }
             .adaptToApiError { it.bodyAsText() }
-            .onLeft {
-                logger.error("Failed to get pokemon from pokeapi", it.reason)
-            }
+            .onLeft { logger.error("Failed to get pokemon from pokeapi", it.reason) }
     }
 }

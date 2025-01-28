@@ -9,9 +9,8 @@ class PokemonApiReadModelAdapter {
             when {
                 specie.flavorTextEntries.isEmpty() -> ""
                 else ->
-                    specie.flavorTextEntries
-                        .firstOrNull { it.language.name == "en" }
-                        ?.flavorText ?: specie.flavorTextEntries.first().flavorText
+                    specie.flavorTextEntries.firstOrNull { it.language.name == "en" }?.flavorText
+                        ?: specie.flavorTextEntries.first().flavorText
             }
         return PokemonReadModel(
             name = specie.name,

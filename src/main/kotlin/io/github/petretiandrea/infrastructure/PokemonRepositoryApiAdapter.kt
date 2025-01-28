@@ -7,9 +7,7 @@ import io.github.petretiandrea.domain.pokemon.PokemonReadModel
 import io.github.petretiandrea.domain.pokemon.PokemonRepository
 import io.github.petretiandrea.infrastructure.apis.pokemon.PokeApi
 
-/**
- *
- */
+/**  */
 class PokemonRepositoryApiAdapter(
     private val pokeApi: PokeApi,
     private val pokemonApiReadModelAdapter: PokemonApiReadModelAdapter

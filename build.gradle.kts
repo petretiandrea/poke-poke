@@ -1,4 +1,5 @@
 import com.diffplug.spotless.LineEnding
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "2.0.21"
@@ -25,6 +26,7 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
     implementation("io.ktor:ktor-serialization-gson:$ktorVersion")
+    testImplementation("io.ktor:ktor-client-mock:$ktorVersion")
 
     // spring
     implementation("org.springframework.boot:spring-boot-starter-webflux")
@@ -47,14 +49,17 @@ tasks.test {
     useJUnitPlatform()
 }
 
-kotlin {
-    jvmToolchain(21)
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs += "-Xjsr305=strict"
+        jvmTarget = "17"
+    }
 }
 
+
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
+    sourceCompatibility = JavaVersion.VERSION_17 // or VERSION_11
+    targetCompatibility = JavaVersion.VERSION_17 // or VERSION_11
 }
 
 configure<com.diffplug.gradle.spotless.SpotlessExtension> {
@@ -65,10 +70,5 @@ configure<com.diffplug.gradle.spotless.SpotlessExtension> {
         ktfmt().kotlinlangStyle()
         trimTrailingWhitespace()
         endWithNewline()
-    }
-    kotlinGradle {
-        toggleOffOn()
-        targetExclude("build/**/*.kts")
-        ktfmt().googleStyle()
     }
 }

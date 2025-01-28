@@ -2,16 +2,15 @@ package io.github.petretiandrea.infrastructure.apis.funtranslation
 
 import arrow.core.Either
 import io.github.petretiandrea.common.ApiResponse
-import io.github.petretiandrea.common.adaptToApiError
 import io.github.petretiandrea.domain.translation.TranslationType
 import io.github.petretiandrea.domain.translation.Translator
+import io.github.petretiandrea.infrastructure.apis.adaptToApiError
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.util.reflect.*
 import org.slf4j.LoggerFactory
 
 class FunTranslationApi(private val httpClient: HttpClient) : Translator {
@@ -50,8 +49,6 @@ class FunTranslationApi(private val httpClient: HttpClient) : Translator {
             }
             .map { it.body<TranslationResponse>() }
             .adaptToApiError { it.bodyAsText() }
-            .onLeft {
-                logger.error("Error during funtranslation", it.reason)
-            }
+            .onLeft { logger.error("Error during funtranslation", it.reason) }
     }
 }

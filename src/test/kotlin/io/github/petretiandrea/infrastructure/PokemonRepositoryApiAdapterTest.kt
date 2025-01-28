@@ -73,9 +73,7 @@ class PokemonRepositoryApiAdapterTest {
         // Then
         verify(pokeApi).getPokemonSpecie(name)
         assert(result.isLeft())
-        result.onLeft {
-            assert(it is FindPokemonError.UnexpectedError)
-        }
+        result.onLeft { assert(it is FindPokemonError.UnexpectedError) }
     }
 
     @Test
@@ -91,8 +89,6 @@ class PokemonRepositoryApiAdapterTest {
         // Then
         verify(pokeApi).getPokemonSpecie(name)
         assert(result.isLeft())
-        result.onLeft {
-            assert(it is FindPokemonError.UnexpectedError)
-        }
+        result.onLeft { assert(it is FindPokemonError.UnexpectedError) }
     }
 }

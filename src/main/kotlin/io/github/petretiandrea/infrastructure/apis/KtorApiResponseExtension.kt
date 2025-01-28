@@ -1,6 +1,8 @@
-package io.github.petretiandrea.common
+package io.github.petretiandrea.infrastructure.apis
 
 import arrow.core.Either
+import io.github.petretiandrea.common.ApiError
+import io.github.petretiandrea.common.ApiResponse
 import io.ktor.client.plugins.*
 import io.ktor.client.statement.*
 import kotlinx.io.IOException

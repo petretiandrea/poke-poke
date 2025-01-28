@@ -50,3 +50,4 @@ gradlew :build
 - setup resiliency thins for external API call. 
 Like retry on 5xx errors, rate-limiting or IO error.
 - define and use a standard for API response when returns errors. Like [ProblemDetails](https://datatracker.ietf.org/doc/html/rfc7807)
+- improve test coverage, actually only test over business logic and main paths are covered

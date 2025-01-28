@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "io.github.petretiandrea"
-version = "1.0-SNAPSHOT"
+version = "${properties["version"]}"
 
 repositories {
     mavenCentral()

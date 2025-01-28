@@ -11,7 +11,7 @@ suspend fun <E, T> Either<Throwable, T>.adaptToApiError(
     return mapLeft { error ->
         when (error) {
             is ResponseException ->
-                ApiError.HttpError<E>(error.response.status.value, bodyParse(error.response), error)
+                ApiError.HttpError(error.response.status.value, bodyParse(error.response), error)
             is IOException -> ApiError.NetworkError(error)
             else -> ApiError.UnexpectedError(error)
         }

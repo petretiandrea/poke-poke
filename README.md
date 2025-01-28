@@ -45,7 +45,8 @@ gradlew :build
 ## Production and improvements tips
 
 - add opentelemetry to service to improve observability
-- add caching layer at API level. The info returned by pokemon api are pretty static.
+- add caching layer. The info returned by pokemon api are pretty static. Also, the whole pokemon translated is static.
+- buy an apikey of translator to avoid rate limiting issue, also combined with caching.
 - setup resiliency thins for external API call. 
-Like retry on 5xx errors or IO error.
-- define and use a standard for API response when returns error like [ProblemDetails](https://datatracker.ietf.org/doc/html/rfc7807)
+Like retry on 5xx errors, rate-limiting or IO error.
+- define and use a standard for API response when returns errors. Like [ProblemDetails](https://datatracker.ietf.org/doc/html/rfc7807)

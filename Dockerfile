@@ -1,4 +1,4 @@
-FROM amazoncorretto:21-alpine as builder
+FROM amazoncorretto:21-alpine3.21 as builder
 
 WORKDIR /app
 
@@ -15,7 +15,7 @@ RUN chmod +x ./gradlew
 RUN ./gradlew build -x test
 
 # runtime stage
-FROM amazoncorretto:8-alpine3.21-jre as runtime
+FROM amazoncorretto:21-alpine3.21 as runtime
 
 COPY --from=builder /app/build/libs/*.jar app.jar
 

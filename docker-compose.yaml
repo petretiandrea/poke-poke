@@ -2,9 +2,10 @@ version: '3.8'
 
 services:
   pokepoke:
-    image: petretiandrea/pokepoke
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: petretiandrea/pokepoke:latest
+# remove comment to build locally
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
     ports:
       - "8080:8080"

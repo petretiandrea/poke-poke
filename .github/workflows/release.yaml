@@ -72,7 +72,7 @@ jobs:
         uses: cycjimmy/semantic-release-action@v4
         with:
           semantic_version: 23.0.2
-          tag_format: appointment-service-${version}
+          tag_format: ${version}
           branches: |
             [ 'main' ]
           extra_plugins: |

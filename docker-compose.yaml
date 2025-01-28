@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   pokepoke:
-    image: petretiandrea/pokepoke:latest
+    image: petretiandrea/poke-poke:latest
 # remove comment to build locally
 #    build:
 #      context: .

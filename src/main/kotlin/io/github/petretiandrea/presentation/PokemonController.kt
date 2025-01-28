@@ -10,4 +10,7 @@ interface PokemonController {
 
     @GetMapping("/{pokemonName}")
     suspend fun getPokemon(@PathVariable pokemonName: String): ResponseEntity<PokemonDto>
+
+    @GetMapping("/{pokemonName}/translated")
+    suspend fun getPokemonTranslated(@PathVariable pokemonName: String): ResponseEntity<PokemonDto>
 }

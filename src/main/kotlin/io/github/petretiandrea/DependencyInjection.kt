@@ -1,8 +1,11 @@
 package io.github.petretiandrea
 
 import com.google.gson.FieldNamingPolicy
+import io.github.petretiandrea.domain.pokemon.PokemonTranslator
+import io.github.petretiandrea.domain.translation.Translator
 import io.github.petretiandrea.infrastructure.PokemonApiReadModelAdapter
 import io.github.petretiandrea.infrastructure.PokemonRepositoryApiAdapter
+import io.github.petretiandrea.infrastructure.apis.funtranslation.FunTranslationApi
 import io.github.petretiandrea.infrastructure.apis.pokemon.PokeApi
 import io.ktor.client.*
 import io.ktor.client.plugins.*
@@ -16,6 +19,20 @@ class DependencyInjection {
 
     @Bean
     fun pokemonRepository(pokeApi: PokeApi) = PokemonRepositoryApiAdapter(pokeApi, PokemonApiReadModelAdapter())
+
+    @Bean
+    fun pokemonTranslator(translator: Translator) = PokemonTranslator(translator)
+
+    @Bean
+    fun funTranslator(): Translator = FunTranslationApi(
+        HttpClient {
+            followRedirects = true
+            defaultRequest { url(FunTranslationApi.BASE_URL) }
+            install(ContentNegotiation) {
+                gson()
+            }
+        }
+    )
 
     @Bean
     fun pokeApi(): PokeApi {

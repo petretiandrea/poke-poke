@@ -16,6 +16,9 @@ and habitat. By decoupling read model from external API model the whole
 logic can be written and tested at domain level without any external strong
 dependency.
 
+## API
+[OpenAPI Spec](https://editor.swagger.io/?url=https://raw.githubusercontent.com/petretiandrea/poke-poke/refs/heads/main/api-spec/openapi.yaml)
+
 ## Tech stack
 - Kotlin (functional enrichment with arrowkt)
 - Gradle as build tool
@@ -40,6 +43,12 @@ docker run -t <any_name> .
 - Gradle to build project
 ```
 gradlew :build
+```
+
+## Usage example
+```
+curl -X GET http://localhost:8080/pokemon/mewtwo
+curl -X GET http://localhost:8080/pokemon/mewtwo/translated
 ```
 
 ## Production and improvements tips

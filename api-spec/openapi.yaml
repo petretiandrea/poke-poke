@@ -27,7 +27,7 @@ paths:
         '404':
           description: Pokemon not found by given name
 
-  /pokemon/translated/{name}:
+  /pokemon/{name}/translated:
     get:
       tags:
         - pokemon

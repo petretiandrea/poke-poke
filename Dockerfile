@@ -10,6 +10,8 @@ COPY gradle.properties .
 
 COPY api-spec api-spec
 COPY src src
+
+RUN chmod +x ./gradlew
 RUN ./gradlew build -x test
 
 # runtime stage

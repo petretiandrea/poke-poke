@@ -1,0 +1,3 @@
+application.name: "pokemon"
+
+server.port: 8080

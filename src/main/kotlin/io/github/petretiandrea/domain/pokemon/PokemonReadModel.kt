@@ -1,9 +1,8 @@
 package io.github.petretiandrea.domain.pokemon
 
-data class Pokemon(
+data class PokemonReadModel(
     val name: String,
     val description: String,
-    val habitat: String?,
+    val habitat: String,
     val isLegendary: Boolean
 )
-

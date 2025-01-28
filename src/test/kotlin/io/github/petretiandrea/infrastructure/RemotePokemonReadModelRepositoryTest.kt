@@ -3,9 +3,7 @@ package io.github.petretiandrea.infrastructure
 import arrow.core.Either
 import io.github.petretiandrea.common.ApiError
 import io.github.petretiandrea.domain.pokemon.FindPokemonError
-import io.github.petretiandrea.infrastructure.apis.FlavorText
-import io.github.petretiandrea.infrastructure.apis.PokeApi
-import io.github.petretiandrea.infrastructure.apis.PokemonResponse
+import io.github.petretiandrea.infrastructure.apis.pokemon.*
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -13,7 +11,7 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 import org.mockito.kotlin.whenever
 
-class RemotePokemonRepositoryTest {
+class RemotePokemonReadModelRepositoryTest {
 
     private lateinit var pokeApi: PokeApi
     private lateinit var repository: RemotePokemonRepository
@@ -25,21 +23,19 @@ class RemotePokemonRepositoryTest {
     }
 
     @Test
-    fun `findPokemon returns Pokemon when API returns valid Specie`() = runTest {
-        // Given
+    fun `findPokemon returns PokemonReadModel when API returns valid Pokemon`() = runTest {
         val name = "pikachu"
-        val specie = PokemonResponse(
-            name = name,
-            flavorTextEntries = listOf(FlavorText("Electric type Pokemon")),
-            habitat = "forest",
-            isLegendary = false
-        )
+        val specie =
+            PokemonResponse(
+                name = name,
+                flavorTextEntries = generateFlavorTexts("en", "fr"),
+                habitat = Habitat("forest", ""),
+                isLegendary = false
+            )
         whenever(pokeApi.getPokemonSpecie(name)).thenReturn(Either.Right(specie))
 
-        // When
         val result = repository.findPokemon(name)
 
-        // Then
         assert(result.isRight())
         result.onRight {
             assertEquals(name, it.name)
@@ -54,9 +50,8 @@ class RemotePokemonRepositoryTest {
     fun `findPokemon returns PokemonNotFound when API returns 404 error`() = runTest {
         // Given
         val name = "unknown"
-        whenever(pokeApi.getPokemonSpecie(name)).thenReturn(
-            Either.Left(ApiError.HttpError(404, "Not Found", Error()))
-        )
+        whenever(pokeApi.getPokemonSpecie(name))
+            .thenReturn(Either.Left(ApiError.HttpError(404, "Not Found", Error())))
 
         // When
         val result = repository.findPokemon(name)
@@ -75,9 +70,8 @@ class RemotePokemonRepositoryTest {
     fun `findPokemon returns UnexpectedError for other HTTP errors`() = runTest {
         // Given
         val name = "bulbasaur"
-        whenever(pokeApi.getPokemonSpecie(name)).thenReturn(
-            Either.Left(ApiError.HttpError(500, "Internal Server Error", Error()))
-        )
+        whenever(pokeApi.getPokemonSpecie(name))
+            .thenReturn(Either.Left(ApiError.HttpError(500, "Internal Server Error", Error())))
 
         // When
         val result = repository.findPokemon(name)
@@ -95,9 +89,8 @@ class RemotePokemonRepositoryTest {
     fun `findPokemon returns UnexpectedError for non-HTTP errors`() = runTest {
         // Given
         val name = "charmander"
-        whenever(pokeApi.getPokemonSpecie(name)).thenReturn(
-            Either.Left(ApiError.UnexpectedError(Error("Network issue")))
-        )
+        whenever(pokeApi.getPokemonSpecie(name))
+            .thenReturn(Either.Left(ApiError.UnexpectedError(Error("Network issue"))))
 
         // When
         val result = repository.findPokemon(name)
@@ -108,5 +101,9 @@ class RemotePokemonRepositoryTest {
         val error = (result as Either.Left).value
         assert(error is FindPokemonError.UnexpectedError)
         assertEquals("Network issue", (error as FindPokemonError.UnexpectedError).error)
+    }
+
+    private fun generateFlavorTexts(vararg languages: String): List<FlavorText> {
+        return languages.map { lang -> FlavorText(lang, Language(lang)) }
     }
 }

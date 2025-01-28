@@ -19,10 +19,9 @@ class FunTranslationApi(private val httpClient: HttpClient) : Translator {
     private val logger = LoggerFactory.getLogger(FunTranslationApi::class.java)
 
     companion object {
-        const val BASE_URL = "https://api.funtranslations.com/translate"
+        const val BASE_URL = "https://api.funtranslations.com/translate/"
     }
 
-    // TODO: production tip. Log error
     override suspend fun translate(
         translationType: TranslationType,
         text: String
@@ -43,10 +42,10 @@ class FunTranslationApi(private val httpClient: HttpClient) : Translator {
             }
 
         return ApiResponse.catch {
-                httpClient.post("/${requestPath}.json") {
+                httpClient.post("${requestPath}.json") {
                     expectSuccess = true
-                    contentType(ContentType.Application.Json)
-                    setBody(RequestTranslation(text))
+                    contentType(ContentType.Application.FormUrlEncoded)
+                    setBody("text=$text")
                 }
             }
             .map { it.body<TranslationResponse>() }
@@ -55,6 +54,4 @@ class FunTranslationApi(private val httpClient: HttpClient) : Translator {
                 logger.error("Error during funtranslation", it.reason)
             }
     }
-
-    private data class RequestTranslation(val text: String)
 }

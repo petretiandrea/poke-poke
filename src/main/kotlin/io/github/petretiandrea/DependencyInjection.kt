@@ -3,7 +3,8 @@ package io.github.petretiandrea
 import com.google.gson.FieldNamingPolicy
 import io.github.petretiandrea.domain.pokemon.PokemonTranslator
 import io.github.petretiandrea.domain.translation.Translator
-import io.github.petretiandrea.infrastructure.RemotePokemonRepository
+import io.github.petretiandrea.infrastructure.PokemonApiReadModelAdapter
+import io.github.petretiandrea.infrastructure.PokemonRepositoryApiAdapter
 import io.github.petretiandrea.infrastructure.apis.funtranslation.FunTranslationApi
 import io.github.petretiandrea.infrastructure.apis.pokemon.PokeApi
 import io.ktor.client.*
@@ -17,7 +18,7 @@ import org.springframework.context.annotation.Configuration
 class DependencyInjection {
 
     @Bean
-    fun pokemonRepository(pokeApi: PokeApi) = RemotePokemonRepository(pokeApi)
+    fun pokemonRepository(pokeApi: PokeApi) = PokemonRepositoryApiAdapter(pokeApi, PokemonApiReadModelAdapter())
 
     @Bean
     fun pokemonTranslator(translator: Translator) = PokemonTranslator(translator)

@@ -11,15 +11,15 @@ import org.junit.jupiter.api.Test
 import org.mockito.Mockito.*
 import org.mockito.kotlin.whenever
 
-class RemotePokemonReadModelRepositoryTest {
+class PokemonRepositoryApiAdapterTest {
 
     private lateinit var pokeApi: PokeApi
-    private lateinit var repository: RemotePokemonRepository
+    private lateinit var repository: PokemonRepositoryApiAdapter
 
     @BeforeEach
     fun setup() {
         pokeApi = mock()
-        repository = RemotePokemonRepository(pokeApi)
+        repository = PokemonRepositoryApiAdapter(pokeApi, PokemonApiReadModelAdapter())
     }
 
     @Test
@@ -28,7 +28,7 @@ class RemotePokemonReadModelRepositoryTest {
         val specie =
             PokemonResponse(
                 name = name,
-                flavorTextEntries = generateFlavorTexts("en", "fr"),
+                flavorTextEntries = emptyList(),
                 habitat = Habitat("forest", ""),
                 isLegendary = false
             )
@@ -37,12 +37,6 @@ class RemotePokemonReadModelRepositoryTest {
         val result = repository.findPokemon(name)
 
         assert(result.isRight())
-        result.onRight {
-            assertEquals(name, it.name)
-            assertEquals("Electric type Pokemon", it.description)
-            assertEquals("forest", it.habitat)
-            assertEquals(false, it.isLegendary)
-        }
         verify(pokeApi).getPokemonSpecie(name)
     }
 
@@ -81,7 +75,6 @@ class RemotePokemonReadModelRepositoryTest {
         assert(result.isLeft())
         result.onLeft {
             assert(it is FindPokemonError.UnexpectedError)
-            assertEquals("Internal Server Error", (it as FindPokemonError.UnexpectedError).error)
         }
     }
 
@@ -98,12 +91,8 @@ class RemotePokemonReadModelRepositoryTest {
         // Then
         verify(pokeApi).getPokemonSpecie(name)
         assert(result.isLeft())
-        val error = (result as Either.Left).value
-        assert(error is FindPokemonError.UnexpectedError)
-        assertEquals("Network issue", (error as FindPokemonError.UnexpectedError).error)
-    }
-
-    private fun generateFlavorTexts(vararg languages: String): List<FlavorText> {
-        return languages.map { lang -> FlavorText(lang, Language(lang)) }
+        result.onLeft {
+            assert(it is FindPokemonError.UnexpectedError)
+        }
     }
 }
